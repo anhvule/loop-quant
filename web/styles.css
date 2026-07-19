@@ -1,0 +1,340 @@
+/* Stock Risk Outlook — institutional research styling.
+   Palette is the validated reference instance: light and dark are each SELECTED
+   (own steps against their own surface), never an automatic inversion. Status
+   colours are reserved for grades and verdicts and always ship beside a text
+   label, so meaning is never carried by colour alone.
+
+   DARK IS THE DEFAULT, unconditionally — not `prefers-color-scheme`, so the app
+   looks the same on any machine. The light palette is preserved verbatim below and
+   is still reachable with <html data-theme="light">. */
+
+:root{
+  color-scheme:dark;         /* native selects, scrollbars and focus rings follow */
+  /* planes */
+  --bg:#0d0d0d; --card:#1a1a19; --line:#2c2c2a; --hairline:rgba(255,255,255,.10);
+  --wash:rgba(57,135,229,.10);
+  /* ink — --axis-ink is the pale step, reserved for SVG tick labels; --muted clears
+     4.5:1 because threshold lines and grade labels are load-bearing text. */
+  --ink:#ffffff; --ink-2:#c3c2b7; --muted:#a3a199; --axis-ink:#898781;
+  /* accent — one only: primary action, focus, links, chart band */
+  --accent:#3987e5; --accent-ink:#6da7ec;
+  /* primary button: its own pair, because the accent step that reads well behind a
+     dark surface is the LIGHT step — an inverted fill, not the same one */
+  --btn-bg:#6da7ec; --btn-fg:#0d0d0d;
+  /* status — reserved; never decorative, never a series colour */
+  --good:#0ca30c; --good-text:#0ca30c; --warn-s:#fab219; --warn-text:#fab219;
+  --serious:#ec835a; --bad:#d03b3b; --bad-text:#e66767;
+  --warn-bg:#2a2410;
+  /* charts */
+  --band:#3987e5; --grid:#2c2c2a; --axis:#383835;
+}
+:root[data-theme="light"]{
+  color-scheme:light;
+  --bg:#f9f9f7; --card:#fcfcfb; --line:#e1e0d9; --hairline:rgba(11,11,11,.10);
+  --wash:rgba(42,120,214,.06);
+  --ink:#0b0b0b; --ink-2:#52514e; --muted:#66655f; --axis-ink:#898781;
+  --accent:#2a78d6; --accent-ink:#1c5cab;
+  --btn-bg:#1c5cab; --btn-fg:#ffffff;
+  --good:#0ca30c; --good-text:#006300; --warn-s:#fab219; --warn-text:#8a5a00;
+  --serious:#ec835a; --bad:#d03b3b; --bad-text:#b3232c;
+  --warn-bg:#fdf6e3;
+  --band:#2a78d6; --grid:#e1e0d9; --axis:#c3c2b7;
+}
+
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{
+  margin:0;padding:0 0 4rem;background:var(--bg);color:var(--ink);
+  font:15px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  font-variant-numeric:tabular-nums;
+}
+.wrap{max-width:1180px;margin:0 auto;padding:0 1rem}
+
+/* ---- focus: one visible ring everywhere (was browser default) ---- */
+:where(a,button,input,select,summary,[tabindex]):focus-visible{
+  outline:2px solid var(--accent);outline-offset:2px;border-radius:6px
+}
+
+/* ---- top bar ---- */
+.topbar{
+  position:sticky;top:0;z-index:20;background:var(--card);
+  border-bottom:1px solid var(--line)
+}
+.topbar .wrap{display:flex;align-items:center;justify-content:space-between;
+  gap:1rem;min-height:52px}
+.brand{display:flex;align-items:baseline;gap:.6rem;min-width:0}
+.mark{font-size:.68rem;font-weight:700;letter-spacing:.14em;color:var(--accent-ink);
+  text-transform:uppercase;white-space:nowrap}
+.brand h1{margin:0;font-size:1rem;font-weight:650;letter-spacing:-.01em;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.topbar .role{font-size:.72rem;color:var(--muted);letter-spacing:.04em;
+  text-transform:uppercase;white-space:nowrap}
+
+/* ---- micro label ---- */
+.mlabel{display:block;font-size:.68rem;font-weight:600;letter-spacing:.07em;
+  text-transform:uppercase;color:var(--muted);margin-bottom:.25rem}
+
+/* ---- command bar ---- */
+.cmd{margin:1.1rem auto .6rem;background:var(--card);border:1px solid var(--line);
+  border-radius:10px;padding:.85rem .9rem}
+.cmd form{display:flex;gap:.7rem;align-items:flex-end;flex-wrap:wrap}
+.field{display:flex;flex-direction:column;min-width:0}
+.field.grow{flex:1 1 320px}
+input,select,button{font:inherit;border-radius:7px;border:1px solid var(--line);
+  padding:.55rem .7rem;background:var(--card);color:var(--ink)}
+input{width:100%;text-transform:uppercase;letter-spacing:.04em;font-weight:600}
+input::placeholder{text-transform:none;letter-spacing:0;font-weight:400;color:var(--muted)}
+select{cursor:pointer}
+button{cursor:pointer}
+#go{background:var(--btn-bg);color:var(--btn-fg);border-color:transparent;
+  font-weight:650;padding-inline:1.4rem;letter-spacing:.02em}
+#go:hover{filter:brightness(1.12)}
+#go[disabled]{opacity:.55;cursor:progress}
+
+.presets{display:flex;gap:1.3rem;flex-wrap:wrap;margin:.75rem 0 0;
+  padding-top:.7rem;border-top:1px solid var(--line)}
+.pgroup{display:flex;align-items:center;gap:.35rem;flex-wrap:wrap}
+.pgroup .mlabel{margin:0 .15rem 0 0}
+.chip{padding:.24rem .6rem;font-size:.8rem;border-radius:999px;
+  background:transparent;color:var(--ink-2);border:1px solid var(--line)}
+.chip:hover{background:var(--wash);border-color:var(--accent);color:var(--ink)}
+/* The native file input is hidden but still focusable, so the label acts as the
+   button while keyboard and screen-reader behaviour stay the browser's own. */
+.chip.file{display:inline-flex;align-items:center;gap:.35rem;cursor:pointer}
+input[type=file]{position:absolute;width:1px;height:1px;opacity:0;pointer-events:none}
+input[type=file]:focus-visible+*,.chip.file:focus-within{outline:2px solid var(--accent);
+  outline-offset:2px}
+#pfile:focus-visible~.chip.file,label.file:has(+#pfile:focus-visible){
+  outline:2px solid var(--accent);outline-offset:2px}
+.imported{margin:.6rem 0 0;font-size:.8rem;color:var(--ink-2);
+  border-top:1px solid var(--line);padding-top:.55rem}
+.imported b{font-weight:650;color:var(--ink)}
+.imported .drop{color:var(--warn-text)}
+
+/* ---- status ---- */
+.status{margin:.8rem auto;padding:.7rem .9rem;border-radius:9px;background:var(--card);
+  border:1px solid var(--line);display:flex;align-items:center;gap:.6rem;
+  font-size:.9rem}
+.status.err{border-color:var(--bad);color:var(--bad-text)}
+.spin{width:15px;height:15px;flex:none;border:2px solid var(--line);
+  border-top-color:var(--accent);border-radius:50%;animation:spin .7s linear infinite}
+.status.err .spin{display:none}
+@keyframes spin{to{transform:rotate(360deg)}}
+@media (prefers-reduced-motion:reduce){.spin{animation-duration:2.4s}}
+
+/* ---- layout ---- */
+main{display:grid;gap:.9rem}
+/* Grid children default to min-width:auto and refuse to shrink below their content,
+   so a 17-column table pushes the whole PAGE wide instead of scrolling inside its
+   own container. min-width:0 hands the overflow back to .scroll where it belongs. */
+main>*,.card{min-width:0}
+.card{background:var(--card);border:1px solid var(--line);border-radius:10px;
+  padding:.95rem 1.05rem}
+.card h2{margin:0 0 .15rem;font-size:.95rem;font-weight:650;letter-spacing:-.005em}
+.card .hint{margin:.15rem 0 .75rem;color:var(--ink-2);font-size:.84rem;line-height:1.5}
+.card .hint:last-child{margin-bottom:0}
+
+/* ---- regime strip ---- */
+.regime{display:flex;align-items:center;gap:1.1rem;flex-wrap:wrap;
+  padding-bottom:.7rem;border-bottom:1px solid var(--line);margin-bottom:.7rem}
+.rstate{display:flex;align-items:center;gap:.45rem;font-size:.95rem;font-weight:700;
+  letter-spacing:.04em;text-transform:uppercase}
+.rstate .dot{width:9px;height:9px;border-radius:50%;background:currentColor}
+.rstate.on{color:var(--good-text)} .rstate.off{color:var(--bad-text)}
+.rfact{font-size:.88rem;color:var(--ink-2)}
+.delta{font-size:.8rem;font-weight:650;padding:.1rem .45rem;border-radius:5px;
+  background:var(--wash);color:var(--ink-2)}
+.delta.up{color:var(--good-text)} .delta.down{color:var(--bad-text)}
+.rmeta{margin-left:auto;font-size:.72rem;color:var(--muted);letter-spacing:.04em;
+  text-transform:uppercase;text-align:right}
+.lede{margin:0;font-size:.86rem;color:var(--ink-2);line-height:1.55}
+.fine{margin-top:.6rem;border-top:1px solid var(--line);padding-top:.55rem}
+.fine>summary{cursor:pointer;font-size:.72rem;font-weight:600;letter-spacing:.07em;
+  text-transform:uppercase;color:var(--muted);list-style:none}
+.fine>summary::-webkit-details-marker{display:none}
+.fine>summary::before{content:"▸ ";font-size:.7em}
+.fine[open]>summary::before{content:"▾ "}
+.fine p{margin:.5rem 0 0;font-size:.82rem;color:var(--ink-2);line-height:1.55}
+
+/* ---- alerts inside cards ---- */
+.warn{background:var(--warn-bg);color:var(--warn-text);
+  border:1px solid var(--hairline);border-left:3px solid var(--warn-s);
+  border-radius:7px;padding:.55rem .75rem;margin:.5rem 0;font-size:.85rem;
+  line-height:1.5}
+
+/* ---- badges & pills ---- */
+.badge{display:inline-flex;align-items:center;gap:.3rem;padding:.16rem .5rem;
+  border-radius:5px;font-size:.71rem;font-weight:700;letter-spacing:.05em;
+  text-transform:uppercase;white-space:nowrap;border-left:3px solid currentColor}
+.badge.pass{background:rgba(12,163,12,.12);color:var(--good-text)}
+.badge.warn{background:rgba(250,178,25,.16);color:var(--warn-text)}
+.badge.fail{background:rgba(208,59,59,.12);color:var(--bad-text)}
+.badge.info{background:rgba(137,135,129,.14);color:var(--ink-2)}
+.badge .n{font-variant-numeric:tabular-nums;opacity:.85}
+
+.pill{display:inline-block;min-width:2.2rem;text-align:center;padding:.1rem .34rem;
+  border-radius:4px;font-size:.7rem;font-weight:700;letter-spacing:.03em;
+  white-space:nowrap;cursor:help}
+.pill.pass{background:rgba(12,163,12,.13);color:var(--good-text)}
+.pill.warn{background:rgba(250,178,25,.18);color:var(--warn-text)}
+.pill.fail{background:rgba(208,59,59,.13);color:var(--bad-text)}
+.pill.info{background:rgba(137,135,129,.13);color:var(--muted)}
+
+/* ---- tables ---- */
+.scroll{overflow:auto;max-width:100%;max-height:72vh;border:1px solid var(--line);
+  border-radius:8px;overscroll-behavior-x:contain}
+table{width:100%;border-collapse:separate;border-spacing:0;font-size:.85rem}
+th,td{padding:.42rem .55rem;text-align:right;white-space:nowrap;
+  border-bottom:1px solid var(--line)}
+th:first-child,td:first-child{text-align:left;position:sticky;left:0;
+  background:var(--card);z-index:1}
+thead th{position:sticky;top:0;z-index:2;background:var(--card);color:var(--muted);
+  font-size:.67rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;
+  border-bottom:1px solid var(--axis)}
+thead th:first-child{z-index:3}
+tbody tr:hover td{background:var(--wash)}
+tbody tr:hover td:first-child{background:color-mix(in srgb,var(--accent) 6%,var(--card))}
+tbody tr:last-child td{border-bottom:0}
+/* rule between verdict blocks — the rows are already grouped by the sort */
+tbody tr.grp td{border-top:2px solid var(--line)}
+.tick{font-weight:650}
+.sub-px{display:block;color:var(--muted);font-size:.75rem;font-weight:400}
+.num{font-variant-numeric:tabular-nums}
+.pos{color:var(--good-text)} .neg{color:var(--bad-text)}
+
+/* ---- detail expanders ---- */
+details.det{border-top:1px solid var(--line)}
+details.det summary{cursor:pointer;padding:.5rem .1rem;font-size:.86rem;
+  display:flex;align-items:center;gap:.5rem;list-style:none}
+details.det summary::-webkit-details-marker{display:none}
+details.det summary::before{content:"▸";color:var(--muted);font-size:.75em;width:.9em}
+details.det[open] summary::before{content:"▾"}
+details.det summary .nm{color:var(--muted);font-weight:400;overflow:hidden;
+  text-overflow:ellipsis;white-space:nowrap}
+details.det summary .badge{margin-left:auto}
+.dgrid{display:grid;gap:1.1rem;margin:.3rem 0 .9rem}
+@media (min-width:900px){.dgrid{grid-template-columns:1fr 1fr}}
+.crit{display:grid;grid-template-columns:auto 1fr;gap:.35rem .6rem;
+  font-size:.84rem;align-items:start}
+.crit .thr{color:var(--muted);font-size:.78rem;line-height:1.45}
+
+/* collapsible card heading */
+summary.shead{cursor:pointer;list-style:none;display:flex;align-items:center;gap:.4rem}
+summary.shead::-webkit-details-marker{display:none}
+summary.shead::before{content:"▾";color:var(--muted);font-size:.75em}
+details:not([open])>summary.shead::before{content:"▸"}
+summary.shead h2{display:inline}
+
+/* ---- sliders ---- */
+.sliders{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+  gap:.5rem .9rem}
+.sliders label{font-size:.8rem;color:var(--ink-2);display:flex;
+  flex-direction:column;gap:.2rem}
+.sliders input[type=range]{width:100%;accent-color:var(--accent)}
+.wname{display:flex;justify-content:space-between;align-items:center}
+.wname b{font-variant-numeric:tabular-nums;font-size:.75rem;color:var(--ink);
+  background:var(--wash);border-radius:4px;padding:0 .3rem}
+
+/* ---- forecast: hero strip + stat tiles ---- */
+.head{display:flex;justify-content:space-between;gap:1rem;flex-wrap:wrap;
+  align-items:flex-start}
+.metrics{display:flex;gap:1.4rem;flex-wrap:wrap}
+.metric{display:flex;flex-direction:column}
+.metric .v{font-size:.95rem;font-weight:650;font-variant-numeric:tabular-nums}
+.metric .v.big{font-size:1.5rem;letter-spacing:-.02em}
+.tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));
+  gap:.6rem;margin:.2rem 0 1rem}
+.tile{border:1px solid var(--line);border-radius:8px;padding:.55rem .7rem;
+  background:var(--bg)}
+.tile .v{font-size:1.3rem;font-weight:650;font-variant-numeric:tabular-nums;
+  letter-spacing:-.02em;display:block}
+.tile .d{font-size:.78rem;font-weight:600}
+.tile.lo .v{color:var(--bad-text)} .tile.hi .v{color:var(--good-text)}
+
+/* ---- charts ---- */
+svg{width:100%;height:auto;display:block}
+.figure{position:relative}
+.tip{position:absolute;pointer-events:none;opacity:0;transition:opacity .1s;
+  background:var(--card);border:1px solid var(--axis);border-radius:7px;
+  padding:.4rem .55rem;font-size:.78rem;line-height:1.45;white-space:nowrap;
+  box-shadow:0 4px 14px rgba(0,0,0,.14);z-index:5;
+  font-variant-numeric:tabular-nums}
+.tip.on{opacity:1}
+.tip b{display:block;font-size:.7rem;letter-spacing:.06em;text-transform:uppercase;
+  color:var(--muted);margin-bottom:.15rem}
+.tip .r{display:flex;justify-content:space-between;gap:.9rem}
+.tip .r span:first-child{color:var(--ink-2)}
+.legend{display:flex;gap:.9rem;flex-wrap:wrap;font-size:.78rem;color:var(--ink-2);
+  margin-top:.5rem}
+.legend i,i.lg{display:inline-block;width:10px;height:10px;border-radius:2px;
+  margin-right:.35rem;vertical-align:-1px}
+.flag{color:var(--warn-text);font-size:.8rem;text-align:left}
+code{background:var(--wash);padding:.05rem .3rem;border-radius:4px;font-size:.9em}
+
+/* ---- company report: snowflake + section scores ---- */
+.snowflake{display:flex;gap:1.4rem;align-items:center;flex-wrap:wrap;margin:.4rem 0 0}
+.snowfig{flex:0 0 300px;max-width:320px}
+.snowside{flex:1 1 260px;min-width:0}
+.snowside .lede{margin:0 0 .8rem}
+.axlist{display:grid;gap:.4rem}
+.axrow{display:grid;grid-template-columns:6.5rem 1fr 2.4rem;align-items:center;
+  gap:.55rem;font-size:.82rem;color:var(--ink-2)}
+.axname{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.axbar{height:7px;border-radius:4px;background:var(--grid);overflow:hidden}
+.axbar i{display:block;height:100%;border-radius:4px;background:var(--muted)}
+/* Score bands carry a number beside them always -- colour is reinforcement here,
+   never the only signal (same rule the grade pills follow). */
+.axbar i.bad{background:var(--bad)} .axbar i.mid{background:var(--warn-s)}
+.axbar i.good{background:var(--good)}
+.axnum{text-align:right;font-variant-numeric:tabular-nums;font-weight:650;
+  color:var(--ink)}
+
+.shead2{display:flex;align-items:center;justify-content:space-between;gap:.7rem;
+  margin-bottom:.15rem}
+.axis-badge{flex:none;font-size:.78rem;font-weight:700;letter-spacing:.02em;
+  padding:.15rem .5rem;border-radius:5px;font-variant-numeric:tabular-nums;
+  border-left:3px solid currentColor}
+.axis-badge.bad{background:rgba(208,59,59,.12);color:var(--bad-text)}
+.axis-badge.mid{background:rgba(250,178,25,.16);color:var(--warn-text)}
+.axis-badge.good{background:rgba(12,163,12,.12);color:var(--good-text)}
+.card h2 .meta{font-weight:400;color:var(--muted);font-size:.85em}
+#sec-value .tiles,#sec-past .tiles{margin-bottom:.8rem}
+
+@media (max-width:640px){
+  .snowfig{flex:1 1 100%;max-width:none;margin:0 auto}
+  .axrow{grid-template-columns:5.5rem 1fr 2.4rem}
+}
+
+/* ---- footer ---- */
+.foot{margin-top:2rem;border-top:1px solid var(--line);padding-top:1rem}
+.foot .wrap{display:grid;gap:1rem;color:var(--muted);font-size:.79rem;line-height:1.55}
+@media (min-width:800px){.foot .wrap{grid-template-columns:1.3fr 1fr}}
+.foot p{margin:0}
+
+/* ---- narrow ---- */
+@media (max-width:640px){
+  .cmd form{gap:.55rem}
+  .field:not(.grow){flex:1 1 46%}
+  .topbar .role{display:none}
+  .rmeta{margin-left:0;text-align:left;width:100%}
+}
+
+/* ---- print ----
+   Paper is a light surface, so the screen palette is swapped back for ink: without
+   this the dark default prints charcoal cards and near-white text. */
+@media print{
+  :root{
+    color-scheme:light;
+    --bg:#fff; --card:#fff; --line:#bbb; --hairline:rgba(0,0,0,.2);
+    --wash:transparent;
+    --ink:#000; --ink-2:#333; --muted:#555; --axis-ink:#666;
+    --accent:#1c5cab; --accent-ink:#1c5cab;
+    --good-text:#006300; --warn-text:#8a5a00; --bad-text:#b3232c;
+    --warn-bg:#f4f4f4;
+    --band:#2a78d6; --grid:#ddd; --axis:#999;
+  }
+  .topbar,.cmd,.status,.sliders,.foot{display:none}
+  body{background:#fff;color:#000}
+  .card{border-color:#bbb;break-inside:avoid}
+  .scroll{max-height:none;overflow:visible}
+}

@@ -1,0 +1,18 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "web",
+      "runtimeExecutable": ".venv\\Scripts\\python.exe",
+      "runtimeArgs": ["web/serve.py"],
+      "port": 8000
+    },
+    {
+      "name": "web-8010",
+      "runtimeExecutable": ".venv\\Scripts\\python.exe",
+      "runtimeArgs": ["web/serve.py", "--port", "8010"],
+      "port": 8010,
+      "autoPort": false
+    }
+  ]
+}

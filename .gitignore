@@ -1,3 +1,15 @@
+# --- personal data: never publish -------------------------------------------
+# Real portfolio holdings. The importer reads any CSV you point it at, so keep
+# your own export out of the repo and pass it with --csv from wherever it lives.
+/portfolio.csv
+portfolio*.csv
+
+# --- generated data & caches -------------------------------------------------
+# loopquant.db alone is ~21MB and is rebuilt from Yahoo on demand; the CSV/PNG
+# outputs and the JSON caches are all reproducible by re-running the scripts.
+/data/
+/logs/
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[codz]

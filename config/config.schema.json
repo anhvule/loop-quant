@@ -1,0 +1,84 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Loop Quant live configuration",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["version", "symbol", "timeframe", "strategy", "risk", "execution"],
+  "properties": {
+    "version": { "type": "integer", "minimum": 1 },
+    "symbol": { "type": "string", "pattern": "^[A-Z0-9]{5,12}$" },
+    "timeframe": { "type": "string", "enum": ["1m", "5m"] },
+
+    "strategy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["weights", "entry_threshold", "exit_threshold", "rsi", "macd", "vwap_band_bps"],
+      "properties": {
+        "weights": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["vwap", "rsi", "macd"],
+          "properties": {
+            "vwap": { "type": "number", "minimum": 0.0, "maximum": 1.0 },
+            "rsi":  { "type": "number", "minimum": 0.0, "maximum": 1.0 },
+            "macd": { "type": "number", "minimum": 0.0, "maximum": 1.0 }
+          }
+        },
+        "entry_threshold": { "type": "number", "minimum": 0.0, "maximum": 1.0 },
+        "exit_threshold":  { "type": "number", "minimum": -1.0, "maximum": 0.0 },
+        "rsi": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["period", "oversold", "overbought"],
+          "properties": {
+            "period":     { "type": "integer", "minimum": 2, "maximum": 100 },
+            "oversold":   { "type": "number", "minimum": 1, "maximum": 49 },
+            "overbought": { "type": "number", "minimum": 51, "maximum": 99 }
+          }
+        },
+        "macd": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["fast", "slow", "signal"],
+          "properties": {
+            "fast":   { "type": "integer", "minimum": 2, "maximum": 100 },
+            "slow":   { "type": "integer", "minimum": 3, "maximum": 200 },
+            "signal": { "type": "integer", "minimum": 2, "maximum": 100 }
+          }
+        },
+        "vwap_band_bps": { "type": "number", "exclusiveMinimum": 0, "maximum": 500 }
+      }
+    },
+
+    "risk": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "atr_period", "atr_mult_sl", "atr_mult_tp", "risk_per_trade_pct",
+        "max_position_pct_equity", "max_daily_loss_pct", "max_open_positions",
+        "cooldown_after_stopout_sec"
+      ],
+      "properties": {
+        "atr_period":                 { "type": "integer", "minimum": 2, "maximum": 100 },
+        "atr_mult_sl":                { "type": "number", "exclusiveMinimum": 0, "maximum": 10 },
+        "atr_mult_tp":                { "type": "number", "exclusiveMinimum": 0, "maximum": 20 },
+        "risk_per_trade_pct":         { "type": "number", "exclusiveMinimum": 0, "maximum": 5 },
+        "max_position_pct_equity":    { "type": "number", "exclusiveMinimum": 0, "maximum": 100 },
+        "max_daily_loss_pct":         { "type": "number", "exclusiveMinimum": 0, "maximum": 100 },
+        "max_open_positions":         { "type": "integer", "minimum": 1, "maximum": 10 },
+        "cooldown_after_stopout_sec": { "type": "integer", "minimum": 0, "maximum": 86400 }
+      }
+    },
+
+    "execution": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["order_type", "limit_timeout_sec", "max_spread_bps"],
+      "properties": {
+        "order_type":        { "type": "string", "enum": ["LIMIT_THEN_MARKET", "MARKET"] },
+        "limit_timeout_sec": { "type": "number", "exclusiveMinimum": 0, "maximum": 300 },
+        "max_spread_bps":    { "type": "number", "exclusiveMinimum": 0, "maximum": 100 }
+      }
+    }
+  }
+}

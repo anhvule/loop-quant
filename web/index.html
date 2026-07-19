@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Stock Risk Outlook — probability ranges, not price targets</title>
+<meta name="description" content="Risk scorecard, investable-vs-reckless verdict and calibrated probability ranges for high-beta stocks. Not investment advice." />
+<link rel="stylesheet" href="/styles.css" />
+</head>
+<body>
+<header class="topbar">
+  <div class="wrap">
+    <div class="brand">
+      <span class="mark">Loop Quant</span>
+      <h1>Stock Risk Outlook</h1>
+    </div>
+    <span class="role">Research tool · not investment advice</span>
+  </div>
+</header>
+
+<div class="wrap">
+  <section class="cmd">
+    <form id="form" autocomplete="off">
+      <div class="field grow">
+        <label class="mlabel" for="symbols">Ticker or cohort</label>
+        <input id="symbols" name="symbols" type="text"
+               placeholder="One ticker for the full forecast, or a list (e.g. NVDA,COIN,SPCE)"
+               required />
+      </div>
+      <div class="field">
+        <label class="mlabel" for="months">Horizon</label>
+        <select id="months">
+          <option value="3">3 months</option>
+          <option value="6" selected>6 months</option>
+          <option value="9">9 months</option>
+          <option value="12">12 months</option>
+        </select>
+      </div>
+      <div class="field">
+        <label class="mlabel" for="rf">Risk-free</label>
+        <select id="rf">
+          <option value="0.03">3.0%</option>
+          <option value="0.04" selected>4.0%</option>
+          <option value="0.05">5.0%</option>
+        </select>
+      </div>
+      <div class="field">
+        <button type="submit" id="go">Analyse</button>
+      </div>
+    </form>
+    <div class="presets" id="examples">
+      <div class="pgroup">
+        <span class="mlabel">One name</span>
+        <button class="chip" data-s="ASTS">ASTS</button>
+        <button class="chip" data-s="IREN">IREN</button>
+        <button class="chip" data-s="CRWV">CRWV</button>
+        <button class="chip" data-s="SPY">SPY</button>
+      </div>
+      <div class="pgroup">
+        <span class="mlabel">Cohorts</span>
+        <button class="chip" id="load-hb">High-beta names</button>
+        <button class="chip" id="load-nuke">Nuclear</button>
+        <button class="chip" id="load-ai">AI / datacentre</button>
+      </div>
+      <div class="pgroup">
+        <span class="mlabel">Deep dive</span>
+        <button class="chip" id="go-report">Company report</button>
+      </div>
+      <div class="pgroup">
+        <span class="mlabel">Portfolio</span>
+        <label class="chip file" for="pfile">
+          <svg width="12" height="12" viewBox="0 0 16 16" aria-hidden="true" focusable="false">
+            <path d="M8 11V2M4.5 5.5 8 2l3.5 3.5" fill="none" stroke="currentColor"
+                  stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M2 10.5V13a1 1 0 0 0 1 1h10a1 1 0 0 0 1-1v-2.5" fill="none"
+                  stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+          </svg>
+          Import CSV
+        </label>
+        <input id="pfile" type="file" accept=".csv,.txt,text/csv,text/plain"
+               aria-label="Import a portfolio export" />
+      </div>
+    </div>
+    <p class="imported" id="import-note" hidden></p>
+  </section>
+
+  <div id="status" class="status" hidden></div>
+  <main id="out" hidden></main>
+</div>
+
+<footer class="foot">
+  <div class="wrap">
+    <p><strong>Method.</strong> Market-factor (beta) model — drift anchored to
+    <code>beta × market drift</code> (a stock's own momentum is refused as noise),
+    volatility-standardised block bootstrap sampled jointly with SPY so correlations and
+    co-crashes survive, with every percentile auto-checked against the stock's own
+    realised history.</p>
+    <p><strong>Data.</strong> SPY benchmark · Yahoo Finance daily closes · analysis runs
+    locally, nothing leaves your machine except price requests. Calibration testing (90%
+    bands covered ~90% of outcomes over 28 years of SPY) applies to the market model;
+    single stocks with short histories are flagged as unvalidated.
+    <strong>No output here is a recommendation to buy, sell or hold anything.</strong></p>
+  </div>
+</footer>
+
+<script src="/app.js"></script>
+<script src="/report.js"></script>
+</body>
+</html>

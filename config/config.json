@@ -1,0 +1,28 @@
+{
+  "version": 1,
+  "symbol": "BTCUSDT",
+  "timeframe": "1m",
+  "strategy": {
+    "weights": { "vwap": 0.35, "rsi": 0.30, "macd": 0.35 },
+    "entry_threshold": 0.5,
+    "exit_threshold": -0.3,
+    "rsi": { "period": 14, "oversold": 30, "overbought": 70 },
+    "macd": { "fast": 12, "slow": 26, "signal": 9 },
+    "vwap_band_bps": 15
+  },
+  "risk": {
+    "atr_period": 14,
+    "atr_mult_sl": 1.5,
+    "atr_mult_tp": 2.5,
+    "risk_per_trade_pct": 0.5,
+    "max_position_pct_equity": 10.0,
+    "max_daily_loss_pct": 3.0,
+    "max_open_positions": 1,
+    "cooldown_after_stopout_sec": 300
+  },
+  "execution": {
+    "order_type": "LIMIT_THEN_MARKET",
+    "limit_timeout_sec": 5,
+    "max_spread_bps": 8
+  }
+}

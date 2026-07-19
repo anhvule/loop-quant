@@ -1,0 +1,54 @@
+{
+  "SPY": {
+    "when": "2026-07-18",
+    "n": 232,
+    "horizon": 63,
+    "fib_median_pct": 0.394,
+    "placebo_uniform_pct": 0.657,
+    "placebo_ratio_pct": 0.612,
+    "skill_vs_uniform": 1.666,
+    "skill_ratio": 1.552,
+    "win_rate": 0.759,
+    "z": 7.88,
+    "verdict": "Fibonacci RATIOS beat matched random ratios"
+  },
+  "ASTS": {
+    "when": "2026-07-18",
+    "n": 65,
+    "horizon": 63,
+    "fib_median_pct": 2.376,
+    "placebo_uniform_pct": 3.744,
+    "placebo_ratio_pct": 3.663,
+    "skill_vs_uniform": 1.575,
+    "skill_ratio": 1.542,
+    "win_rate": 0.723,
+    "z": 3.6,
+    "verdict": "Fibonacci RATIOS beat matched random ratios"
+  },
+  "IREN": {
+    "when": "2026-07-18",
+    "n": 41,
+    "horizon": 63,
+    "fib_median_pct": 2.985,
+    "placebo_uniform_pct": 3.391,
+    "placebo_ratio_pct": 3.41,
+    "skill_vs_uniform": 1.136,
+    "skill_ratio": 1.142,
+    "win_rate": 0.707,
+    "z": 2.65,
+    "verdict": "Fibonacci RATIOS beat matched random ratios"
+  },
+  "TE": {
+    "when": "2026-07-18",
+    "n": 61,
+    "horizon": 63,
+    "fib_median_pct": 2.171,
+    "placebo_uniform_pct": 3.079,
+    "placebo_ratio_pct": 3.321,
+    "skill_vs_uniform": 1.418,
+    "skill_ratio": 1.53,
+    "win_rate": 0.754,
+    "z": 3.97,
+    "verdict": "Fibonacci RATIOS beat matched random ratios"
+  }
+}
